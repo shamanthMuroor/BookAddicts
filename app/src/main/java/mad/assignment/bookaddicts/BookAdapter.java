@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,25 +17,25 @@ import java.util.ArrayList;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
-    private ArrayList<BookInfo> bookInfoArrayList;
+    private ArrayList<BookInfo> bookList;
     private Context context;
 
-    public BookAdapter(ArrayList<BookInfo> bookInfoArrayList, Context context) {
-        this.bookInfoArrayList = bookInfoArrayList;
+    public BookAdapter(ArrayList<BookInfo> bookList, Context context) {
+        this.bookList = bookList;
         this.context = context;
     }
 
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_rv_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.each_book, parent, false);
         return new BookViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-        BookInfo bookInfo = bookInfoArrayList.get(position);
-        holder.nameTV.setText(bookInfo.getTitle());
+        BookInfo bookInfo = bookList.get(position);
+        holder.bookName.setText(bookInfo.getTitle());
         holder.publisherTV.setText(bookInfo.getPublisher());
         holder.pageCountTV.setText("No of Pages : " + bookInfo.getPageCount());
         holder.dateTV.setText(bookInfo.getPublishedDate());
@@ -70,20 +69,20 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     @Override
     public int getItemCount() {
-        return bookInfoArrayList.size();
+        return bookList.size();
     }
 
     public class BookViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTV, publisherTV, pageCountTV, dateTV;
+        TextView bookName, publisherTV, pageCountTV, dateTV;
         ImageView bookIV;
 
         public BookViewHolder(View itemView) {
             super(itemView);
-            nameTV = itemView.findViewById(R.id.idTVBookTitle);
+            bookName = itemView.findViewById(R.id.bookName);
             publisherTV = itemView.findViewById(R.id.idTVpublisher);
             pageCountTV = itemView.findViewById(R.id.idTVPageCount);
             dateTV = itemView.findViewById(R.id.idTVDate);
-            bookIV = itemView.findViewById(R.id.idIVbook);
+            bookIV = itemView.findViewById(R.id.bookThumbnail);
         }
     }
 }

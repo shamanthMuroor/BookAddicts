@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/idIVbook"
+            android:id="@+id/bookThumbnail"
             android:layout_width="130dp"
             android:layout_height="160dp"
             android:layout_marginStart="10dp"
@@ -22,11 +22,11 @@
             android:layout_marginBottom="10dp" />
 
         <TextView
-            android:id="@+id/idTVBookTitle"
+            android:id="@+id/bookName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/idIVbook"
+            android:layout_toEndOf="@id/bookThumbnail"
             android:padding="3dp"
             android:text="Book Title"
             android:textColor="?attr/colorPrimary"
@@ -36,9 +36,9 @@
             android:id="@+id/idTVpublisher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/idTVBookTitle"
+            android:layout_below="@id/bookName"
             android:layout_marginTop="3dp"
-            android:layout_toEndOf="@id/idIVbook"
+            android:layout_toEndOf="@id/bookThumbnail"
             android:padding="3dp"
             android:text="Publisher"
             android:textColor="?attr/colorPrimary"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/idTVpublisher"
             android:layout_marginTop="3dp"
-            android:layout_toEndOf="@id/idIVbook"
+            android:layout_toEndOf="@id/bookThumbnail"
             android:padding="3dp"
             android:text="Page count"
             android:textColor="?attr/colorPrimary"

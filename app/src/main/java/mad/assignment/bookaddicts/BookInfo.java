@@ -1,7 +1,5 @@
 package mad.assignment.bookaddicts;
 
-import java.util.ArrayList;
-
 public class BookInfo {
     private String title;
     private String subtitle;

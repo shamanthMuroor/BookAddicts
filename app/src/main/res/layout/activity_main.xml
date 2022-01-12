@@ -14,35 +14,45 @@
         android:weightSum="5">
 
         <EditText
-            android:id="@+id/idEdtSearchBooks"
+            android:id="@+id/edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="4.4"
-            android:hint="Search using book name, ISBN" />
+            android:background="@drawable/search"
+            android:hint="Search using book name, ISBN"
+            android:padding="8dp"/>
 
         <ImageButton
-            android:id="@+id/idBtnSearch"
+            android:id="@+id/searchBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
             android:adjustViewBounds="true"
             android:background="@drawable/search_icon"
             android:backgroundTint="?attr/colorPrimary"
-            android:scaleType="fitCenter" />
+            />
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/idRVBooks"
+        android:id="@+id/bookRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/idLLsearch" />
 
     <ProgressBar
-        android:id="@+id/idLoadingPB"
+        android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/show_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No Books to Display" />
 
 </RelativeLayout>

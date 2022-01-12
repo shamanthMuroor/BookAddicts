@@ -3,10 +3,12 @@ package mad.assignment.bookaddicts;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,65 +29,81 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    private RequestQueue mRequestQueue;
-    private ArrayList<BookInfo> bookInfoArrayList;
-    private ProgressBar progressBar;
-    private EditText searchEdt;
-    private ImageButton searchBtn;
+    
+    ArrayList<BookInfo> bookInfoArrayList;
+    ProgressBar progressBar;
+    EditText edit;
+    ImageButton search;
+    TextView showEmpty;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        progressBar = findViewById(R.id.idLoadingPB);
-        searchEdt = findViewById(R.id.idEdtSearchBooks);
-        searchBtn = findViewById(R.id.idBtnSearch);
+        progressBar = findViewById(R.id.spinner);
+        edit = findViewById(R.id.edit);
+        search = findViewById(R.id.searchBtn);
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
+                searchForBook();
+            }
+        });
 
-                if (searchEdt.getText().toString().isEmpty()) {
-                    searchEdt.setError("Please enter search query");
-                    return;
+        edit.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    searchForBook();
+                    return true;
                 }
-
-                if(isOnline()) {
-                    getBooksInfo(searchEdt.getText().toString());
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "No Internet!", Toast.LENGTH_SHORT).show();
-                }
+                return false;
             }
         });
     }
 
+    void searchForBook() {
+        progressBar.setVisibility(View.VISIBLE);
+        showEmpty = findViewById(R.id.show_empty);
+        recyclerView = findViewById(R.id.bookRecyclerView);
+
+        if (edit.getText().toString().isEmpty()) {
+            edit.setError("Please enter book name to search!");
+            progressBar.setVisibility(View.GONE);
+        }
+        else if(isOnline()) {
+            showEmpty.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            displayBooks(edit.getText().toString());
+        }
+        else {
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(), "No Internet!", Toast.LENGTH_SHORT).show();
+            recyclerView.setVisibility(View.GONE);
+            showEmpty.setVisibility(View.VISIBLE);
+        }
+    }
+
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             return true;
         }
         return false;
     }
 
-    private void getBooksInfo(String query) {
 
+    private void displayBooks(String query) {
         bookInfoArrayList = new ArrayList<>();
-
-        mRequestQueue = Volley.newRequestQueue(MainActivity.this);
-
-        // clear cache when data is being updated
-        mRequestQueue.getCache().clear();
-
         String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
 
-        RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
-        JsonObjectRequest booksObjrequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 progressBar.setVisibility(View.GONE);
@@ -100,6 +118,11 @@ public class MainActivity extends AppCompatActivity {
                         String publishedDate = volumeObj.optString("publishedDate");
                         String description = volumeObj.optString("description");
                         int pageCount = volumeObj.optInt("pageCount");
+                        String previewLink = volumeObj.optString("previewLink");
+                        String infoLink = volumeObj.optString("infoLink");
+                        JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
+                        String buyLink = saleInfoObj.optString("buyLink");
+
 
 //                        JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
 //                        String thumbnail = imageLinks.optString("small");
@@ -113,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
                             thumbnail = "false";
                         }
 
-
 //                        String thumbnail="";
 //                        JSONObject imageLinks = volumeObj.optJSONObject("imageLinks");
 //                        if (imageLinks != null && imageLinks.has("thumbnail")) {
@@ -121,34 +143,28 @@ public class MainActivity extends AppCompatActivity {
 //                        }
 
 
-                        String previewLink = volumeObj.optString("previewLink");
-                        String infoLink = volumeObj.optString("infoLink");
-                        JSONObject saleInfoObj = itemsObj.optJSONObject("saleInfo");
-                        String buyLink = saleInfoObj.optString("buyLink");
-
                         BookInfo bookInfo = new BookInfo(title, subtitle, publisher, publishedDate, description, pageCount, thumbnail, previewLink, infoLink, buyLink);
-
                         bookInfoArrayList.add(bookInfo);
-                        BookAdapter adapter = new BookAdapter(bookInfoArrayList, MainActivity.this);
+
+                        BookAdapter bookAdapter = new BookAdapter(bookInfoArrayList, MainActivity.this);
 
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL, false);
-                        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.idRVBooks);
-
-                        mRecyclerView.setLayoutManager(linearLayoutManager);
-                        mRecyclerView.setAdapter(adapter);
+                        recyclerView = findViewById(R.id.bookRecyclerView);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                        recyclerView.setAdapter(bookAdapter);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "No Book Found ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "No Book Found!!!", Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Error found is " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Error: " + error, Toast.LENGTH_SHORT).show();
             }
         });
 
-        queue.add(booksObjrequest);
+        requestQueue.add(req);
     }
 }

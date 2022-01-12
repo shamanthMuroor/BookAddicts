@@ -20,16 +20,16 @@ public class BookDetails extends AppCompatActivity {
     String title, subtitle, publisher, publishedDate, description, thumbnail, previewLink, infoLink, buyLink;
     int pageCount;
 
-    TextView titleTV, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
+    TextView bookName, subtitleTV, publisherTV, descTV, pageTV, publishDateTV;
     Button previewBtn, buyBtn;
-    private ImageView bookIV;
+    private ImageView bookThumbnail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
 
-        titleTV = findViewById(R.id.idTVTitle);
+        bookName = findViewById(R.id.bookName);
         subtitleTV = findViewById(R.id.idTVSubTitle);
         publisherTV = findViewById(R.id.idTVpublisher);
         descTV = findViewById(R.id.idTVDescription);
@@ -37,7 +37,7 @@ public class BookDetails extends AppCompatActivity {
         publishDateTV = findViewById(R.id.idTVPublishDate);
         previewBtn = findViewById(R.id.idBtnPreview);
         buyBtn = findViewById(R.id.idBtnBuy);
-        bookIV = findViewById(R.id.idIVbook);
+        bookThumbnail = findViewById(R.id.bookThumbnail);
 
         // getting data passed from adapter class
         Intent intent = getIntent();
@@ -52,7 +52,7 @@ public class BookDetails extends AppCompatActivity {
         infoLink = intent.getStringExtra("infoLink");
         buyLink = intent.getStringExtra("buyLink");
 
-        titleTV.setText(title);
+        bookName.setText(title);
         subtitleTV.setText(subtitle);
         publisherTV.setText(publisher);
         publishDateTV.setText("Published On : " + publishedDate);
@@ -60,10 +60,10 @@ public class BookDetails extends AppCompatActivity {
         pageTV.setText("No Of Pages : " + pageCount);
 
         if(thumbnail == "false") {
-            Picasso.get().load(R.drawable.no_preview).into(bookIV);
+            Picasso.get().load(R.drawable.no_preview).into(bookThumbnail);
         }
         else {
-            Picasso.get().load(thumbnail).into(bookIV);
+            Picasso.get().load(thumbnail).into(bookThumbnail);
         }
 
 

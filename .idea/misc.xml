@@ -3,10 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/bg_gradient.xml" value="0.34791666666666665" />
+        <entry key="app/src/main/res/drawable/bgd.xml" value="0.34791666666666665" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.24583333333333332" />
-        <entry key="app/src/main/res/layout/activity_book_details.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="app/src/main/res/drawable/search.xml" value="0.34322916666666664" />
+        <entry key="app/src/main/res/drawable/splash_background.xml" value="0.34791666666666665" />
+        <entry key="app/src/main/res/layout/activity_book_details.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3229166666666667" />
+        <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.15833333333333333" />
         <entry key="app/src/main/res/layout/book_rv_item.xml" value="0.4" />
+        <entry key="app/src/main/res/layout/each_book.xml" value="0.3229166666666667" />
+        <entry key="app/src/main/res/layout/search.xml" value="0.3229166666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.19322916666666667" />
       </map>
     </option>
@@ -16,5 +24,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.3229166666666667" />
+      </ProjectState>
+    </option>
   </component>
 </project>
